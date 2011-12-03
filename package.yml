@@ -2,7 +2,7 @@ name: CacheManager
 
 web: "[http://holyshared.github.com/CacheManager](http://holyshared.github.com/CacheManager)"
 
-description: 
+description: "Cash API which uses localStorage and sessionStorage is offered."
 
 authors: "[Noritaka Horio](http://sharedhat.com)"
 
@@ -23,4 +23,4 @@ current: 1.0
 
 #docs: http://url_to_plugin_docs
 
-demo: http://holyshared.github.com/CacheManager/
+#demo: http://holyshared.github.com/CacheManager/
