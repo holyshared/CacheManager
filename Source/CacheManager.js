@@ -27,29 +27,23 @@ provides:
 
 (function(global){
 
-/**
- * CacheManager
- */
 var CacheManager = global.CacheManager = function (storage){
 
-	this.storage = storage;
+	var name = '';	
+
+	if (Type.isString(storage) !== true){
+		throw new TypeError('');
+	}
+
+	name = storage.capitalize() + 'Storage';
+
+	if (!CacheManager[name]){
+		throw new TypeError('');
+	}
+	this.storage = CacheManager[name];
 
 }.implement({
 
-
-    /*
-
-        Example: 
-
-        var content = {
-            name: 'foo',
-            age: 28,
-            email: 'foo@example.com'
-        };
-        cacheManager.set('name=foo&age=28', content);
-        cacheManager.set('name=foo&age=28', content, 1 * 60 * 60 * 1000);
-
-    */
     set: function(key, content, limit){
         var cacheTime = new Date(),
             cacheContent = null;
@@ -67,17 +61,6 @@ var CacheManager = global.CacheManager = function (storage){
         this.storage.setItem(key, cacheContent);
     },
 
-    /*
-
-        Example:
-
-        var cache = cacheManager.get('name=foo&age=28');
-        if (cache.isLimit() === true) {
-            //remove a cache content
-            cache.destory();
-        }
-
-    */
     get: function(key){
         var cache = null,
             cacheContent = this.storage.getItem(key);
@@ -93,7 +76,15 @@ var CacheManager = global.CacheManager = function (storage){
         });
 
 		return new CacheManager.CacheContent(cache);
-    }
+    },
+
+	remove: function(key){
+		this.storage.removeItem(key);
+	},
+
+	clear: function(){
+		this.storage.clear();
+	}
 
 });
 
@@ -122,32 +113,11 @@ CacheManager.HashStorage = {
 	},
 	removeItem: function(key){
 		delete this._store[key];
+	},
+	clear: function(){
+		this._store = {};
 	}
 };
-
-
-/*
-
-Example:
-
-var content = CacheContent({
-	storage: storage,
-	key: 'name=foo&age=28',
-    limit: 1 * 60 * 60 * 1000 + new Date().getTime(),
-    content: {
-        foo: 'foo',
-        bar: 'bar'
-    }
-});
-
-content.getKey();
-content.getStorage();
-content.getLimit()
-content.getContent();
-content.isLimit();
-content.destory();
-
-*/
 
 CacheManager.CacheContent = function (properties){
 
@@ -164,7 +134,7 @@ CacheManager.CacheContent = function (properties){
 	Object.merge(instance, {
 		
 	    isLimit: function(){
-	        if (instance.limit > new Date().getTime()){
+	        if (this.getLimit() > new Date().getTime()){
 	            return false;
 	        } else {
 	            return true;
@@ -172,9 +142,12 @@ CacheManager.CacheContent = function (properties){
 	    },
 
 	    destroy: function(){
-	        instance.storage.removeItem(instance.key);
-	    }
-		
+	        var key = this.getKey(),
+	        	storage = this.getStorage();
+
+			storage.removeItem(key);
+		}
+
 	});
 
 };

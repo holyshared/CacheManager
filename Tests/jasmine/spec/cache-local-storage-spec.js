@@ -1,42 +1,90 @@
 /*
-    Class.Cache - LocalStorage
+	CacheManager - LocalStorage
 */
 (function(){
 
-var LocalIncluder = new Class({
+describe("CacheManager.LocalStorage", function(){
 
-    Cache: 'local',
+    var cacheManager = null;
 
-    fetch: function(criteria){
-        var cache = this.cache.get(criteria);
-        if (cache && cache.isLimit() !== false) {
-            return cache.getContent();
-        }
-        var content = {
-            name: 'foo',
-            age: 28
-        };
-        this.cache.set(criteria, content, 1 * 60 * 60 * 1000);
-
-        return content;
-    }
-
-});
-
-describe("Class.Cache - LocalStorage", function(){
-
-    var cacher = null;
-
-    beforeEach(function() {
-        cacher = new LocalIncluder();
+    beforeEach(function(){
+		cacheManager = new CacheManager('local');
     });
 
 	it("equal", function(){
-        var v1 = cacher.fetch('name=foo&age=28');
-        var v2 = cacher.fetch('name=foo&age=28');
 
-        expect(v1.name).toEqual(v2.name);
-        expect(v1.age).toEqual(v2.age);
+		var content = {
+			name: 'foo',
+			age: 28
+		};
+
+		cacheManager.set('name=foo&age=28', content, 1 * 60 * 60 * 1000);
+
+        var cache = cacheManager.get('name=foo&age=28'),
+        	cacheContent = cache.getContent();
+
+        expect(content.name).toEqual(cacheContent.name);
+        expect(content.age).toEqual(cacheContent.age);
+
+	});
+
+
+    it("limit", function(){
+
+		var cache = null,
+			cacheContent = null,
+			content = {};
+
+		content = { name: 'foo', age: 28 };
+
+		cache = cacheManager.get('name=foo&age=20');
+
+        expect(cache).toEqual(null);
+
+
+		cacheManager.set('name=foo&age=20', content, 0);
+
+        cache = cacheManager.get('name=foo&age=20');
+
+        expect(cache.isLimit()).toEqual(true);
+
+	});
+
+
+	it("remove", function(){
+
+		var cache = null,
+			content = {};
+
+		content = { name: 'foo', age: 28 };
+
+		cacheManager.set('name=foo&age=20', content, 60000);
+
+		cacheManager.remove('name=foo&age=20');
+
+        cache = cacheManager.get('name=foo&age=20');
+
+        expect(cache).toEqual(null);
+
+	});
+
+
+
+	it("clear", function(){
+
+		var cache = null,
+			content = {};
+
+		content = { name: 'foo', age: 28 };
+
+		cacheManager.set('name=foo&age=20', content, 60000);
+
+		cacheManager.clear();
+
+        cache = cacheManager.get('name=foo&age=20');
+
+        expect(cache).toEqual(null);
+
 	});
 
 });

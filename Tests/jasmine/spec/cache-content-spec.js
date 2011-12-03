@@ -1,82 +1,61 @@
 describe("CacheContent", function() {
-/*
-	var cache1,
-		cache2,
-		storage = {
-			_caches: {},
-			setItem: function(key, content){
-				this._caches[key] = content;
-			},
-			getItem: function(key){
-				if (!this._caches[key]){
-					return false;
-				}
-				return this._caches[key];
-			},
-			removeItem: function(key){
-				delete this._caches[key];
-			}
-		},
-		cacheKey = cache1.getKey(),
-	    cacheLimit = 1 * 60 * 60 * 1000 + new Date().getTime(),
-		cacheContent = {
-	        foo: 'foo',
-	        bar: 'bar'
-	    };
-*/
-	beforeEach(function() {
-/*		cache1 = new CacheContent({
-			storage: storage,
-			key: 'name=foo&age=28',
-		    limit: limit,
-		    content: cacheContent
+
+	it("storage is equal", function(){
+		var cache = new CacheManager.CacheContent({
+			storage: CacheManager.HashStorage
+		});
+		expect(cache.getStorage()).toEqual(CacheManager.HashStorage);
+	});
+
+	it("key is equal", function() {
+		var cache = new CacheManager.CacheContent({
+			key: 'foo'
+		});
+		expect(cache.getKey()).toEqual('foo');
+	});
+
+	it("limit is equal", function() {
+		var cache = new CacheManager.CacheContent({
+			limit: 1000
+		});
+		expect(cache.getLimit()).toEqual(1000);
+	});
+
+	it("content is equal", function() {
+		var content = { name: 'foo' }
+		var cache = new CacheManager.CacheContent({
+			content: content
+		});
+		expect(cache.getContent()).toEqual(content);
+	});
+
+	it("limit is valid", function() {
+		var cache = null;
+
+		cache = new CacheManager.CacheContent({
+			limit: new Date().getTime()
+		});
+		expect(cache.isLimit()).toEqual(true);
+
+		cache = new CacheManager.CacheContent({
+			limit: new Date().getTime() + (1 * 60 * 60 * 1000)
+		});
+		expect(cache.isLimit()).toEqual(false);
+	});
+
+	it("destroy", function() {
+
+		var cache = null;
+
+		cache = new CacheManager.CacheContent({
+			key: 'foo',
+			storage: CacheManager.HashStorage,
+			limit: new Date().getTime() + (1 * 60 * 60 * 1000)
 		});
 
-		cache2 = new CacheContent({
-			storage: storage,
-			key: 'name=foo&age=28',
-		    limit: new Date().getTime(),
-		    content: cacheContent
-		});
-		storage.setItem('name=foo&age=28', cache1);
-*/
-	});
+		cache.destroy();
 
-	//
-	it("storage is equal", function() {
-//		expect(cache1.getStorage()).toEqual(storage);
-		expect(true).toEqual(true);
+		expect(CacheManager.HashStorage.getItem('foo')).toEqual(null);
 	});
-/*
-	it ("key is equal", function() {
-		expect(cache1.getKey()).toEqual('name=foo&age=28');
-	});
-
-	it ("limit is equal", function() {
-		expect(cache1.getLimit()).toEqual(cacheLimit);
-	});
-
-	it ("content is equal", function() {
-		expect(cache1.getContent()).toEqual(content);
-	});
-
-	it ("limit", function() {
-		expect(cache1.isLimit()).toEqual(false);
-	});
-
-	setTimeout(function(){
-
-		it ("limit is over", function() {
-			expect(cache2.isLimit()).toEqual(true);
-		});
-		
-	}, 100);
-
-	it ("destroy", function() {
-		cacheKey = cache1.getKey();
-		cache1.destroy();
-		expect(storage.getItem(cacheKey)).toEqual(false);
-	});
-*/
 
 });
