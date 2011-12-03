@@ -1,0 +1,26 @@
+name: CacheManager
+
+web: "[http://holyshared.github.com/CacheManager](http://holyshared.github.com/CacheManager)"
+
+description: 
+
+authors: "[Noritaka Horio](http://sharedhat.com)"
+
+license: "[MIT License](http://sharedhat.com/mit-license.txt)"
+
+copyright: "&copy; [Noritaka Horio](http://sharedhat.com)"
+
+sources:
+  - Source/CacheManager.js
+
+author: holyshared
+
+category: Utilities
+
+tags: [cache, storage, localStorage, sessionStorage]
+
+current: 1.0
+
+#docs: http://url_to_plugin_docs
+
+demo: http://holyshared.github.com/CacheManager/
