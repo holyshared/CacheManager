@@ -32,13 +32,13 @@ var CacheManager = global.CacheManager = function (storage){
 	var name = '';	
 
 	if (Type.isString(storage) !== true){
-		throw new TypeError('');
+		throw new TypeError('The name of storage needs to be a character string.');
 	}
 
 	name = storage.capitalize() + 'Storage';
 
 	if (!CacheManager[name]){
-		throw new TypeError('');
+		throw new TypeError('The storage ' + name + ' is not defined.');
 	}
 	this.storage = CacheManager[name];
 
@@ -49,7 +49,7 @@ var CacheManager = global.CacheManager = function (storage){
             cacheContent = null;
 
         if (Type.isNumber(limit) === false) {
-            throw new TypeError('cache limit invalid.');
+            throw new TypeError('The earned hours of cash need to be milli seconds.');
         }
 
         cacheTime.setTime(cacheTime.getTime() + limit);
@@ -58,6 +58,7 @@ var CacheManager = global.CacheManager = function (storage){
             limit: cacheTime.getTime(),
             content: content
         });
+
         this.storage.setItem(key, cacheContent);
     },
 
@@ -98,10 +99,10 @@ CacheManager.HashStorage = {
 	_store: {},
 	setItem: function(key, content){
 		if (!Type.isString(key)){
-			throw new TypeError('invalid key');
+			throw new TypeError('The key needs to be a character string.');
 		}
 		if (!content){
-			throw new TypeError('content is not empty');
+			throw new TypeError('The contents which cash carries out are empty.');
 		}
 		this._store[key] = content;
 	},
