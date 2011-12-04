@@ -67,7 +67,7 @@ var CacheManager = global.CacheManager = function (storage){
 
 		if (!cacheContent){
 			return null;
-	}
+		}
 
 		cache = JSON.decode(cacheContent);
  		cache = Object.merge(cache, {
