@@ -29,7 +29,7 @@ provides:
 
 var CacheManager = global.CacheManager = function (storage){
 
-	var name = '';	
+	var name = '';
 
 	if (Type.isString(storage) !== true){
 		throw new TypeError('The name of storage needs to be a character string.');
@@ -44,38 +44,36 @@ var CacheManager = global.CacheManager = function (storage){
 
 }.implement({
 
-    set: function(key, content, limit){
-        var cacheTime = new Date(),
-            cacheContent = null;
+	set: function(key, content, limit){
+		var cacheTime = new Date(),
+			cacheContent = null;
 
-        if (Type.isNumber(limit) === false) {
-            throw new TypeError('The earned hours of cash need to be milli seconds.');
-        }
+		if (Type.isNumber(limit) === false) {
+			throw new TypeError('The earned hours of cash need to be milli seconds.');
+		}
 
         cacheTime.setTime(cacheTime.getTime() + limit);
 
         cacheContent = JSON.encode({
-            limit: cacheTime.getTime(),
-            content: content
-        });
-
-        this.storage.setItem(key, cacheContent);
-    },
+			limit: cacheTime.getTime(),
+			content: content
+		});
+		this.storage.setItem(key, cacheContent);
+	},
 
     get: function(key){
-        var cache = null,
-            cacheContent = this.storage.getItem(key);
+		var cache = null,
+			cacheContent = this.storage.getItem(key);
 
-        if (!cacheContent) {
-            return null;
+		if (!cacheContent){
+			return null;
         }
 
-        cache = JSON.decode(cacheContent);
-        cache = Object.merge(cache, {
-            key: key,
-            storage: this
-        });
-
+		cache = JSON.decode(cacheContent);
+ 		cache = Object.merge(cache, {
+ 			key: key,
+			storage: this
+		});
 		return new CacheManager.CacheContent(cache);
     },
 
@@ -107,8 +105,8 @@ CacheManager.HashStorage = {
 		this._store[key] = content;
 	},
 	getItem: function(key){
-        if (!this._store[key]){
-		    return null;
+		if (!this._store[key]){
+			return null;
 		}
 		return this._store[key];
 	},
@@ -122,35 +120,33 @@ CacheManager.HashStorage = {
 
 CacheManager.CacheContent = function (properties){
 
-    var instance = this, getter = null;
+	var instance = this, getter = null;
 
 	//generate getter methods
-    Object.each(properties, function(value, key){
-        getter = 'get' + key.capitalize();
+	Object.each(properties, function(value, key){
+		getter = 'get' + key.capitalize();
 		instance[getter] = function(){
 			return properties[key];
 		};
-    });
+	});
 
 	Object.merge(instance, {
-		
-	    isLimit: function(){
-	        if (this.getLimit() > new Date().getTime()){
-	            return false;
-	        } else {
-	            return true;
-	        }
-	    },
 
-	    destroy: function(){
-	        var key = this.getKey(),
-	        	storage = this.getStorage();
+		isLimit: function(){
+			if (this.getLimit() > new Date().getTime()){
+				return false;
+	        } else {
+				return true;
+			}
+		},
+
+		destroy: function(){
+			var key = this.getKey(),
+				storage = this.getStorage();
 
 			storage.removeItem(key);
 		}
-
 	});
-
 };
 
 }(this));
