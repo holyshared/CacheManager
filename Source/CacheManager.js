@@ -52,22 +52,22 @@ var CacheManager = global.CacheManager = function (storage){
 			throw new TypeError('The earned hours of cash need to be milli seconds.');
 		}
 
-        cacheTime.setTime(cacheTime.getTime() + limit);
+		cacheTime.setTime(cacheTime.getTime() + limit);
 
-        cacheContent = JSON.encode({
+		cacheContent = JSON.encode({
 			limit: cacheTime.getTime(),
 			content: content
 		});
 		this.storage.setItem(key, cacheContent);
 	},
 
-    get: function(key){
+	get: function(key){
 		var cache = null,
 			cacheContent = this.storage.getItem(key);
 
 		if (!cacheContent){
 			return null;
-        }
+	}
 
 		cache = JSON.decode(cacheContent);
  		cache = Object.merge(cache, {
@@ -75,7 +75,7 @@ var CacheManager = global.CacheManager = function (storage){
 			storage: this
 		});
 		return new CacheManager.CacheContent(cache);
-    },
+	},
 
 	remove: function(key){
 		this.storage.removeItem(key);
@@ -135,7 +135,7 @@ CacheManager.CacheContent = function (properties){
 		isLimit: function(){
 			if (this.getLimit() > new Date().getTime()){
 				return false;
-	        } else {
+			} else {
 				return true;
 			}
 		},
